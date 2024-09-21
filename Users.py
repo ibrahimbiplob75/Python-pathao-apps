@@ -1,4 +1,7 @@
 import hashlib
+from BRTA import BRTA
+
+license_authority = BRTA()
 
 
 class Users:
@@ -59,12 +62,29 @@ class Driver(Users):
         super().__init__(name, email, password)
         self.location = locations
         self.licence = licence
+        self.valid_driver = license_authority.validate_license(email, licence)
         self.earning = 0
 
+    def attend_driving_test(self):
+        result = license_authority.get_licence(self.email)
+        if result == True:
+            self.licence = result
+            self.valid_driver = True
+        else:
+            print("Your Lisense is Failed")
+
     def start_a_trip(self, destination, fare):
-        self.earning += destination
-        self.location=destination
+        self.earning += fare
+        self.location = destination
 
 
 customer1 = Users("Ibrahim", "ibrahim75@gmail.com", "*123Ab#")
 Users.log_in("ibrahim75@gmail.com", "*123Ab#")
+
+kobir = Driver("Kobir Mia", "kobir@gmail.com", "12345", "Mohammadpur", 456344)
+kobir_check = license_authority.validate_license(kobir.email, kobir.licence)
+print(kobir_check)
+kobir.attend_driving_test()
+kobir_check = license_authority.validate_license(kobir.email, kobir.licence)
+print(kobir_check)
+
